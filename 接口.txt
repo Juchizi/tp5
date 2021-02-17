@@ -1,1 +1,1 @@
-api/Card/cardTiming                 每天晚上11点运行一次
+api/Card/cardTiming                 每锟斤拷锟斤拷锟斤拷11锟斤拷锟斤拷锟斤拷一锟斤拷 淇敼娴嬭瘯
