@@ -1,0 +1,266 @@
+<extend name="Layout/application"/>
+
+<block name="css">
+   <style>
+      .fa-check {
+         color: green;
+      }
+
+      .fa-close {
+         color: red;
+      }
+   </style>
+
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+         权限菜单管理
+         <small>Permissions index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Permissions</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+
+   <section class="content">
+
+      <include file="Layout/_flash"/>
+
+      <div class="row">
+         <div class="col-xs-12">
+            <div class="box">
+               <div class="box-header">
+                  <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i
+                        class="fa fa-refresh"></i></a>
+                  <a href="/admin/permissions/create" class="btn btn-success btn-add" title="添加"><i
+                        class="fa fa-plus"></i>
+                     添加</a>
+                  <button class="btn btn-primary" id="show_all" title="显示 | 隐藏"><i class="fa fa-arrows-alt"></i> 显示 | 隐藏</button>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                     <thead>
+                     <tr>
+                        <th>
+                           <input type="checkbox" class="check_all">
+                        </th>
+                        <th>ID</th>
+                        <th>权限名称</th>
+                        <th>权限路由</th>
+                        <th>图标</th>
+                        <th>排序</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+
+                     <volist name="permissions" id="permission">
+                        <tr data-id="{{$permission.id}}">
+                           <td>
+                              <input type="checkbox" class="checked_id" name="check_id[]" value="{{$permission.id}}">
+                           </td>
+                           <td>{{$permission.id}}</td>
+                           <td>
+                              <button type="button" class="btn btn-success btn-xs">{{$permission.name}}</button>
+                           </td>
+                           <td>{{$permission.label}}</td>
+                           <td>
+                              <i class="{{$permission.icon}}"></i>
+                           </td>
+                           <td>
+                              <input type="hidden" name="id[]" value="{{$permission.id}}">
+                              <input type="text" name="sort[]" class="sort" value="{{$permission.sort_order}}"
+                                     style="width: 50px;">
+                           </td>
+                           <td>{{$permission.create_at}}</td>
+                           <td>
+                              <a href="{{:url('permissions/edit',['id'=>$permission.id])}}" title="编辑"><i
+                                    class="fa fa-pencil"></i></a>
+                              <a href="javascript:;" class="delete" title="删除" style="margin-left: 15px;color:red;"><i
+                                    class="fa fa-trash"></i></a>
+                           </td>
+                        </tr>
+
+                        <volist name="permission.children" id="children">
+                           <tr data-id="{{$children.id}}" id="row_{{$children.id}}" class="xParent">
+                              <td>
+                                 <input type="checkbox" class="checked_id" name="check_id[]" value="{{$children.id}}">
+                              </td>
+                              <td>{{$children.id}}</td>
+                              <td>
+                                 <button type="button" class="btn btn-warning btn-xs">&nbsp;&nbsp;&nbsp;|---{{$children.name}}</button>
+                              </td>
+                              <td>{{$children.label}}</td>
+                              <td>
+                                 <i class="{{$children.icon}}"></i>
+                              </td>
+                              <td>
+                                 <input type="hidden" name="id[]" value="{{$children.id}}">
+                                 <input type="text" name="sort[]" class="sort" value="{{$children.sort_order}}"
+                                        style="width: 50px;">
+                              </td>
+                              <td>{{$children.create_at}}</td>
+                              <td>
+                                 <a href="{{:url('permissions/edit',['id'=>$children.id])}}" title="编辑"><i
+                                       class="fa fa-pencil"></i></a>
+                                 <a href="javascript:;" class="delete" title="删除"
+                                    style="margin-left: 15px;color:red;"><i
+                                       class="fa fa-trash"></i></a>
+                              </td>
+                           </tr>
+
+                           <volist name="children.children" id="child">
+                              <tr data-id="{{$child.id}}" class="xChildren" style="display: none;">
+                                 <td>
+                                    <input type="checkbox" class="checked_id" name="check_id[]" value="{{$child.id}}">
+                                 </td>
+                                 <td>{{$child.id}}</td>
+                                 <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|+++{{$child.name}}
+                                 </td>
+                                 <td>{{$child.label}}</td>
+                                 <td>
+                                    <i class="{{$child.icon}}"></i>
+                                 </td>
+                                 <td>
+                                    <input type="hidden" name="id[]" value="{{$child.id}}">
+                                    <input type="text" name="sort[]" class="sort" value="{{$child.sort_order}}"
+                                           style="width: 50px;">
+                                 </td>
+                                 <td>{{$child.create_at}}</td>
+                                 <td>
+                                    <a href="{{:url('permissions/edit',['id'=>$child.id])}}" title="编辑"><i
+                                          class="fa fa-pencil"></i></a>
+                                    <a href="javascript:;" class="delete" title="删除"
+                                       style="margin-left: 15px;color:red;"><i
+                                          class="fa fa-trash"></i></a>
+                                 </td>
+                              </tr>
+
+                           </volist>
+                        </volist>
+                     </volist>
+
+
+                     </tbody>
+                  </table>
+
+               </div>
+               <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+   </section>
+</block>
+
+<block name="js">
+   <script>
+      $(function () {
+         //刷新
+         $('.btn-refresh').click(function () {
+            window.location.reload();
+         });
+
+         //删除
+         $('.delete').click(function () {
+            var id = $(this).parents('tr').data('id');
+            var _this = $(this);
+
+            layer.confirm('确认删除吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: "/admin/permissions/delete/" + id,
+                     data: {id: id},
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           if (data.status == 1) {
+                              layer.alert(data.msg, {icon: 1}, function (index) {
+                                 _this.parents('tr').fadeOut(400);
+                                 layer.close(index);
+                              });
+                           } else {
+                              layer.alert(data.msg, {icon: 2});
+                           }
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+
+         //排序
+         $('.sort').change(function () {
+            var info = {
+               id: $(this).parents('tr').data('id'),
+               sort: $(this).val()
+            };
+
+            layer.confirm('确认改变排序吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     url: "{{:url('permissions/sort')}}",
+                     data: info,
+                     type: 'POST',
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           window.location.reload();
+                        }
+                     }
+                  });
+               });
+            return false;
+         })
+      });
+
+
+      //ajax显示隐藏
+      // $("tr.xParent").dblclick(function () {
+      //    $(this).toggleClass();
+      //    $(".child_" + this.id).toggle();
+      // });
+
+      $("#show_all").click(function () {
+         $("tr.xParent").toggleClass();
+         $("tr.xChildren").toggle('active');
+      })
+   </script>
+
+</block>
+
+
+
+
+
+
+

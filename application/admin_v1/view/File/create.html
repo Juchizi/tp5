@@ -1,0 +1,50 @@
+<extend name="Layout/application"/>
+<block name="css">
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+         文件上传
+         <small>File create</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> File</a></li>
+         <li class="active">Create</li>
+      </ol>
+   </section>
+
+   <section class="content" style="width: 70%;">
+
+      <include file="Layout/_flash"/>
+
+      <div class="box box-success">
+         <div class="box-body">
+            <form class="form-horizontal" enctype="multipart/form-data" role="form" method="post" action="{{:url('File/save')}}">
+               <div class="box-body">
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">文件</label>
+                     <div class="col-sm-10">
+                        <div class="layui-upload">
+                           <input type="file" name="url">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <button type="reset" class="btn btn-default">重置</button>
+                     <button type="submit" class="btn btn-info pull-right">提交</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+
+   </section>
+</block>
+<block name="js">
+   <!--上传图片-->
+   <script src="/vendor/qiniu/jquery.html5-fileupload.js"></script>
+   <script src="/vendor/qiniu/upload.js"></script>
+</block>
+
+
+

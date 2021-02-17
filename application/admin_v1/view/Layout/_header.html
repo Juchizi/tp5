@@ -1,0 +1,91 @@
+<header class="main-header">
+   <!-- Logo -->
+   <a href="/admin" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>A</b>LT</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>后台管理</b>LTE</span>
+   </a>
+   <!-- Header Navbar: style can be found in header.less -->
+   <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+         <span class="sr-only">设置</span>
+      </a>
+
+      <div class="navbar-custom-menu">
+         <ul class="nav navbar-nav">
+            <!-- Notifications: style can be found in dropdown.less -->
+            <li class="dropdown notifications-menu">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-warning">{{:count($comes)}}</span>
+               </a>
+               <ul class="dropdown-menu">
+                  <li class="header"><span style="color:red;">预计今天进店人数</span></li>
+                  <li>
+
+                     <ul class="menu">
+
+                        <volist name="comes" id="come">
+                           <li><a href="javascript:;">客资ID:{{$come.customer_id}}|电话:{{$come.customer.phone}}|网销:{{$come.customer.wang}}</a>
+                           </li>
+                        </volist>
+
+                     </ul>
+                  </li>
+                  <li class="footer"><a href="/admin/tracks/index" target="back">查看所有</a></li>
+               </ul>
+            </li>
+            <!-- Tasks: style can be found in dropdown.less -->
+            <li class="dropdown tasks-menu">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa fa-trash"></i>
+               </a>
+               <ul class="dropdown-menu">
+                  <li>
+                     <ul class="menu">
+                        <li>
+                           <a href="/admin/index/clear">清楚缓存</a>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+            </li>
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="/vendor/assets/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                  <span class="hidden-xs">{{:session('admin.name')}}</span>
+               </a>
+               <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                     <img src="/vendor/assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                     <p>
+                        {{:session('admin.name')}}
+                        <small>{{:session('admin.login_at')}}</small>
+                     </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                     <div class="pull-left">
+                        <a href="#" class="btn btn-default btn-flat">设置</a>
+                     </div>
+                     <div class="pull-right">
+                        <a href="/admin/logins/logout" class="logout btn btn-default btn-flat">退出</a>
+                     </div>
+                  </li>
+               </ul>
+            </li>
+            <!-- Control Sidebar Toggle Button -->
+            <li>
+               <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+         </ul>
+      </div>
+   </nav>
+</header>
+
+

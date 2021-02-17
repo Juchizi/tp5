@@ -1,0 +1,238 @@
+<extend name="Layout/application"/>
+<block name="css">
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+            打卡设置
+         <small>Company create</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> company</a></li>
+         <li class="active">Create</li>
+      </ol>
+   </section>
+   <style>
+      #container{
+         min-width:600px;
+         min-height:500px;
+      }
+   </style>
+   <link rel="stylesheet" href="/vendor/layui/css/layui.css"  media="all">
+   <section class="content" style="width: 70%;">
+      <include file="Layout/_flash"/>
+      <div class="box box-success">
+         <div class="box-body">
+            <ul class="nav nav-tabs">
+               <li class="active"><a href="#tab1" data-toggle="tab">基本参数</a></li>
+               <li class="pull-right"><a href="javascript:history.back(-1)" class="btn btn-sm"
+                                         style="padding:10px 2px;"><i class="fa fa-list"></i> 返回</a></li>
+            </ul>
+            <form class="form-horizontal layui-form" role="form" method="post" action="{{:url('company/update')}}" >
+               <input type="hidden" name="id" value="{{$info->id??''}}">
+               <div class="box-body">
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">地址</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="address" onchange="adre()" id="address" class="form-control" placeholder="请输入地址" value="{{$info->address??''}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label"></label>
+                     <div class="col-sm-10">
+                  <div id="container"></div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">上班时间</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="go_to"  id="go_to"  class="form-control" placeholder="请输入上班时间" value="{{$info->go_to??''}}" onfocus="this.blur()">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">下班时间</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="go_off" id="go_off" class="form-control" placeholder="请输入下班时间" value="{{$info->go_off??''}}" onfocus="this.blur()">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">打卡范围</label>
+                     <div class="col-sm-10">
+                        <input type="number" name="range" id="range" class="form-control" placeholder="请输入打卡范围/米" value="{{$info->range??''}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">经度</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="lng" class="form-control" id="lng" value="{{$info->lng??''}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">纬度</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="lat" class="form-control" id="lat" value="{{$info->lat??''}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">工作日</label>
+                     <div class="layui-input-block">
+                        <input type="checkbox" name="working[]" title="周一" value="1" <if strstr($info.working_day,'1')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周二" value="2" <if strstr($info.working_day,'2')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周三" value="3" <if strstr($info.working_day,'3')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周四" value="4" <if strstr($info.working_day,'4')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周五" value="5" <if strstr($info.working_day,'5')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周六" value="6" <if strstr($info.working_day,'6')>checked=''</if>>
+                        <input type="checkbox" name="working[]" title="周日" value="7" <if strstr($info.working_day,'7')>checked=''</if>>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">法定假日排休</label>
+                     <div class="layui-input-block">
+                        <input type="checkbox" name="legal" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF" <if $info.legal == '0'>checked=''</if>>
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <button type="submit" class="btn btn-info pull-right">提交</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </section>
+   <script charset="utf-8" src="https://map.qq.com/api/gljs?v=2.exp&key=UYRBZ-GMTLU-LNLV2-4GAP2-5WIHQ-M5F4U"></script>
+   <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=UYRBZ-GMTLU-LNLV2-4GAP2-5WIHQ-M5F4U"></script>
+   <script src="/vendor/assets/bower_components/jquery/dist/jquery.min.js"></script>
+   <script src="/vendor/laydate/laydate.js"></script>
+   <script src="/vendor/layer/layer.js"></script>
+   <script src="/vendor/layui/layui.js"></script>
+   <script>
+      var geocoder, marker = null;
+      //获取打卡范围
+      var range = $('#range').val();
+      if (typeof range == "undefined" || range == null || range == "") {
+         var range = 500;
+      }
+      // function init(){
+         console.log('-------进入地图方法------');
+         var lngs		=	 $('#lng').val();
+         var lats		=	 $('#lat').val();
+         console.log(range);
+         console.log('==========='+lats);
+         console.log('==========='+lngs);
+         if (typeof lngs == "undefined" || lngs == null || lngs == "") {
+            lats = 38.913945;
+            lngs = 121.614824;
+         }
+
+         var center=new qq.maps.LatLng(lats,lngs);
+         var map=new qq.maps.Map(document.getElementById("container"),{
+            center:center,
+            zoom:14
+         });
+
+      function adre() {
+         var keyword = document.getElementById("address").value;
+         var geocoder = null;
+
+         geocoder = new qq.maps.Geocoder();
+         //对指定地址进行解析
+         geocoder.getLocation(keyword);
+         //设置服务请求成功的回调函数
+         geocoder.setComplete(function(result) {
+            console.log(result.detail.location);
+            lats = result.detail.location.lat;
+            lngs  = result.detail.location.lng;
+            map.setCenter(new qq.maps.LatLng(lats,lngs));
+            $("#lng").val(lngs);
+            $("#lat").val(lats);
+         });
+         //若服务请求失败，则运行以下函数
+         geocoder.setError(function() {
+
+            console.log("出错了，请输入正确的地址！！！");
+         });
+      }
+
+         //圆形初始化
+         var circle = new qq.maps.Circle({
+            map: map,
+            center: center,
+            radius: 1000,
+            fillColor: new qq.maps.Color(0,15,255, 0.5),
+            strokeWeight: 1
+         });
+
+         //圆的半径
+         circle.setMap(map);
+         circle.setVisible(true);
+         circle.setRadius(parseInt(range));
+
+         //坐标点
+         var info = new qq.maps.InfoWindow({map: map});
+         geocoder = new qq.maps.Geocoder({
+            complete : function(result){
+               map.setCenter(result.detail.location);
+               $('#address').val(result.detail.address);
+               var marker = new qq.maps.Marker({
+                  map:map,
+                  position: result.detail.location
+               });
+               //添加监听事件 当标记被点击了  设置图层
+               qq.maps.event.addListener(marker, 'click', function() {
+                  info.open();
+                  info.setContent('<div style="width:280px;height:100px;">'+
+                          result.detail.address+'</div>');
+                  info.setPosition(result.detail.location);
+               });
+            }
+         });
+         geocoder.getAddress(center);
+         qq.maps.event.addListener(map, 'click', function(event) {
+            alert('您点击的位置为: [' + event.latLng.getLat() + ', ' +
+                    event.latLng.getLng() + ']');
+               console.log(event);
+               //获取经纬度数值   按照,分割字符串 取出前两位 解析成浮点数
+               var lat = parseFloat(event.latLng.getLat());
+               var lng = parseFloat(event.latLng.getLng());
+               var latLng = new qq.maps.LatLng(lat, lng);
+               //调用信息窗口
+               var info = new qq.maps.InfoWindow({map: map});
+               $('#lng').val(lng);
+               $('#lat').val(lat);
+               //调用获取位置方法
+               geocoder.getAddress(latLng);
+
+         });
+
+      // }
+      // window.onload=init;
+      //时间选择器
+      laydate.render({
+         elem: '#go_to'
+         ,type: 'time'
+      });
+      //时间选择器
+      laydate.render({
+         elem: '#go_off'
+         ,type: 'time'
+      });
+      layui.use('form', function(){
+         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+         //……
+
+         //但是，如果你的HTML是动态生成的，自动渲染就会失效
+         //因此你需要在相应的地方，执行下述方法来进行渲染
+         form.render();
+      });
+   </script>
+</block>
+
+<block name="js">
+
+</block>
+
+
+
+
+

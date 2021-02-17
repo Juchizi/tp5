@@ -1,0 +1,227 @@
+<extend name="Layout/application"/>
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         文件列表
+         <small>File index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> File</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+
+   <section class="content" style="overflow-x: auto;">
+
+      <include file="Layout/_flash"/>
+
+      <div class="row">
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <div class="box-header">
+                  <div class="col-md-5">
+                     <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i
+                             class="fa fa-refresh"></i></a>
+                     <a href="/admin/File/create" class="btn btn-success btn-add" title="添加"><i
+                             class="fa fa-plus"></i>
+                        添加</a>
+                     <a href="javascript:;" class="btn btn-danger btn-del delete_all" title="删除"><i
+                             class="fa fa-trash"></i> 删除</a>
+<!--                     <a href="/admin/customers/export_customer" class="btn btn-primary btn-add" title="导出"><i-->
+<!--                             class="fa fa-sign-in"></i>-->
+<!--                        导出</a>-->
+                  </div>
+
+                  <!--搜索-->
+                  <form action="" method="get">
+
+                     <!--日期选择-->
+                     <div class="col-md-4">
+                        <div class="input-group input-group-sm" style="width: 280px;margin-top: 10px;">
+
+                           <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                 <li>录入时间</li>
+                              </button>
+                           </div>
+
+                           <input type="text" name="date" value="{{$Request.param.date}}"
+                                  class="form-control date">
+                           <div class="input-group-btn">
+                              <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+
+                  <form action="" method="get">
+                     <!--输入框搜索-->
+                     <div class="col-md-3">
+                        <div class="input-group input-group-sm" style="width:280px;margin-top: 10px;">
+                           <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                 <li>录入人</li>
+                              </button>
+                           </div>
+                           <input type="text" name="name" class="form-control pull-right"
+                                  value="{{$Request.param.name}}" placeholder=""/>
+                           <div class="input-group-btn">
+                              <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+
+                  </form>
+               </div>
+
+               <!-- /.box-header -->
+               <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                     <thead>
+                     <tr>
+                        <th>
+                           <input type="checkbox" class="check_all">
+                        </th>
+                        <th>录入时间</th>
+                        <th>录入人姓名</th>
+                        <th>缩略图</th>
+                        <th>文件名</th>
+                        <th>格式</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <foreach name="file" id="files">
+                        <tr data-id="{{$files.id}}">
+                           <td>
+                              <input type="checkbox" class="checked_id" name="check_id[]" value="{{$files.id}}">
+                           </td>
+                           <td title="create_at">
+                              {{$files.create_at}}
+                           </td>
+                           <td>
+                              {{$files.admin}}
+                           </td>
+                           <td>
+                              <if $files.type == 'mp4'>
+                              <video controls poster="/images/w3school.gif" width="100px">
+                                 <source src="/uploads/images/{{$files.url}}" type="video/mp4">
+                              </video>
+                              <else/>
+                              <img src="/uploads/images/{{$files.url}}" width="100px">
+                              </if>
+                           </td>
+                           <td>
+                              {{$files.url}}
+                           </td>
+                           <td>
+                              {{$files.type}}
+                           </td>
+                        </tr>
+                     </foreach>
+                     </tbody>
+                  </table>
+                  <div class="box-footer">
+                     共 {{$file->total()}} 条数据
+                     <div class="page">
+                        {{$file->render()|raw}}
+                     </div>
+                  </div>
+               </div>
+               <!-- /.box-body -->
+            </div>
+         </div>
+         <!-- /.box -->
+      </div>
+      <!-- /.col -->
+   </section>
+
+
+</block>
+
+
+<block name="js">
+   <script>
+      $(function () {
+         // 搜索
+         //日期范围选择
+         lay('.date').each(function () {
+            laydate.render({
+               elem: this,
+               range: '~',
+               done: function (val) {
+                  // $(this).val(val);
+               }
+            });
+         });
+         // 搜索框
+         $('body').on("click", '.search-ul li a', function (event) {
+            var _this = $(this);
+            var _field = _this.data('field');
+            var _html = _this.html();
+            var _box = _this.closest('.input-group-btn');
+            _box.find('.search_field').val(_field);
+            _box.next('input').attr('placeholder', _html);
+            _box.find('.field').html(_html);
+         });
+
+         //刷新
+         $('.btn-refresh').click(function () {
+            window.location.reload();
+         });
+
+
+         // 全选，反选
+         $('.check_all').click(function () {
+            $('.checked_id').each(function () {
+               if (this.checked) {
+                  this.checked = false;
+               } else {
+                  this.checked = true;
+               }
+            })
+         });
+
+         //多选删除
+         $('.delete_all').click(function () {
+            var check_length = $('.checked_id:checked').length;
+            if (check_length == 0) {
+               layer.msg('请你至少选中一条', {icon: 2, offset: 't'});
+               return false;
+            }
+
+            layer.confirm('确认删除选中的 ' + check_length + ' 条吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: '/admin/File/delete_all',
+                     data: $('.checked_id:checked').serialize(),
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           $('.checked_id:checked').parents('tr').fadeOut(400);
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+      })
+   </script>
+</block>
+
+
+

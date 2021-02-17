@@ -1,0 +1,137 @@
+<aside class="main-sidebar">
+   <!-- sidebar: style can be found in sidebar.less -->
+   <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+         <div class="pull-left image">
+            <img src="/vendor/assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+         </div>
+         <div class="pull-left info">
+            <p>{{:session('admin.name')}}</p>
+            <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+         </div>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+         <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+         </div>
+      </form>
+      <!--/.search form-->
+
+
+      <ul class="sidebar-menu" data-widget="tree">
+         <li class="active treeview" id="main">
+            <a href="javascript:;" data-url="/admin/index/main" data-id="-1" class="param">
+               <i class="fa fa-home"></i> <span>后台首页</span>
+               <span class="pull-right-container">
+      </span>
+            </a>
+         </li>
+
+         <volist name="menus" id="menu">
+
+            <if condition="$menu.label != '/admin/index/main'">
+               <li class="treeview">
+                  <a href="#">
+                     <i class="{{$menu.icon}}"></i> <span>{{$menu.name}}</span>
+                     <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+      </span>
+                  </a>
+                  <ul class="treeview-menu">
+
+                     <volist name="menu.children" id="children">
+                        <li><a href="javascript:;" data-url="{{$children.label}}" data-id="1" class="param"><i
+                              class="{{$children.icon}}"></i> {{$children.name}}</a></li>
+                     </volist>
+                  </ul>
+               </li>
+            </if>
+         </volist>
+      </ul>
+
+
+      <!--<ul class="sidebar-menu" data-widget="tree">-->
+         <!--<li class="active treeview" id="main">-->
+            <!--<a href="javascript:;" data-url="/admin/index/main" data-id="-1" class="param">-->
+               <!--<i class="fa fa-home"></i> <span>后台首页</span>-->
+               <!--<span class="pull-right-container">-->
+      <!--</span>-->
+            <!--</a>-->
+         <!--</li>-->
+         <!--<li class="treeview">-->
+            <!--<a href="#">-->
+               <!--<i class="fa fa-user-plus"></i> <span>客资管理</span>-->
+               <!--<span class="pull-right-container">-->
+      <!--<i class="fa fa-angle-left pull-right"></i>-->
+      <!--</span>-->
+            <!--</a>-->
+            <!--<ul class="treeview-menu">-->
+               <!--<li><a href="javascript:;" data-url="{{:url('customers/index')}}" data-id="1" class="param"><i-->
+                     <!--class="fa fa-user"></i> 客资列表</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('tracks/index')}}" data-id="1" class="param"><i-->
+                     <!--class="fa fa-viacoin"></i> 客资追踪</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('orders/index')}}" data-id="1" class="param"><i-->
+                     <!--class="fa fa-cny"></i> 客资订单</a></li>-->
+            <!--</ul>-->
+         <!--</li>-->
+         <!--<li class="treeview">-->
+            <!--<a href="#">-->
+               <!--<i class="fa  fa-user-md"></i> <span>员工管理</span>-->
+               <!--<span class="pull-right-container">-->
+                  <!--<i class="fa fa-angle-left pull-right"></i>-->
+                  <!--</span>-->
+            <!--</a>-->
+            <!--<ul class="treeview-menu">-->
+               <!--<li><a href="javascript:;" data-url="{{:url('clerks/index')}}" data-id="1" class="param"><i-->
+                     <!--class="fa fa-list"></i> 员工列表</a></li>-->
+            <!--</ul>-->
+         <!--</li>-->
+         <!--<li class="treeview">-->
+            <!--<a href="#">-->
+               <!--<i class="fa fa-dashboard"></i> <span>内容管理</span>-->
+               <!--<span class="pull-right-container">-->
+      <!--<i class="fa fa-angle-left pull-right"></i>-->
+      <!--</span>-->
+            <!--</a>-->
+            <!--<ul class="treeview-menu">-->
+               <!--<li><a href="javascript:;" data-url="{{:url('articles/index')}}" data-id="1" class="param"><i-->
+                     <!--class="fa fa-columns"></i> 文章列表</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('categories/index')}}" data-id="2" class="param"><i-->
+                     <!--class="fa fa-th-list"></i> 文章分类</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('galleries/index')}}" data-id="3" class="param"><i-->
+                     <!--class="fa fa-photo"></i> 相册管理</a></li>-->
+            <!--</ul>-->
+         <!--</li>-->
+
+         <!--<li class="treeview">-->
+            <!--<a href="#">-->
+               <!--<i class="fa fa-gears"></i>-->
+               <!--<span>系统设置</span>-->
+               <!--<span class="pull-right-container">-->
+      <!--<span class="label label-primary pull-right">3</span>-->
+      <!--</span>-->
+            <!--</a>-->
+            <!--<ul class="treeview-menu">-->
+               <!--<li><a href="javascript:;" data-url="{{:url('admins/index')}}" data-id="3" class="param">-->
+                  <!--<i class="fa fa-users"></i>用户列表</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('roles/index')}}" data-id="3" class="param">-->
+                  <!--<i class="fa fa-vcard"></i>用户组</a></li>-->
+               <!--<li><a href="javascript:;" data-url="{{:url('permissions/index')}}" data-id="3" class="param">-->
+                  <!--<i class="fa fa-user-circle"></i>菜单权限</a></li>-->
+            <!--</ul>-->
+         <!--</li>-->
+      <!--</ul>-->
+
+
+   </section>
+   <!-- /.sidebar -->
+</aside>
+
+

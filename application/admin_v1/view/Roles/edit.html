@@ -1,0 +1,147 @@
+<extend name="Layout/application"/>
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         编辑用户组
+         <small>Role edit</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Role</a></li>
+         <li class="active">edit</li>
+      </ol>
+   </section>
+
+   <section class="content" style="width: 70%;">
+      <div class="box box-success">
+
+         <div class="box-body">
+            <form role="form" method="post" action="{{:url('roles/update',['id'=>$role.id])}}">
+
+               <div class="nav-tabs-custom">
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a href="#tab1" data-toggle="tab">编辑用户组</a></li>
+                     <li class="pull-right"><a href="javascript:history.back(-1)" class="btn btn-sm"
+                                               style="padding:10px 2px;"><i class="fa fa-list"></i> 返回</a></li>
+                  </ul>
+                  <div class="tab-content">
+                     <div class="tab-pane active" id="tab1">
+                        <div class="box-body">
+                           <div class="box-body">
+
+                              <div class="form-group">
+                                 <label>用户组名</label>
+                                 <input type="text" name="name" class="form-control" value="{{$role.name}}">
+                              </div>
+
+                              <div class="form-group">
+                                 <label>描述</label>
+                                 <textarea name="description" class="form-control"
+                                           rows="3">{{$role.description}}</textarea>
+                              </div>
+
+                              <div class="form-group">
+                                 <label>权限</label>
+
+                                 <volist name="permissions" id="permission">
+                                    <div class="form-group rule">
+                                       <label>
+                                          <input type="checkbox" class="minimal-blue rule_one" name="permission_id[]"
+                                                 value="{{$permission.id}}"
+                                          <if condition="in_array($permission.id,$role_permissions)">checked</if>
+                                          >
+                                          <button type="button" class="btn btn-warning btn-xs"> {{$permission.name}}
+                                          </button>
+                                       </label>
+
+                                       <div class="rule1">
+                                          <volist name="permission.children" id="children">
+                                             <div class="col-sm-offset-1">
+                                                <label>
+                                                   <input type="checkbox" class="minimal-blue rule_two"
+                                                          name="permission_id[]" value="{{$children.id}}"
+                                                   <if condition="in_array($children.id,$role_permissions)">checked</if>
+                                                   >
+                                                   <button type="button" class="btn btn-success btn-xs">
+                                                      {{$children.name}}
+                                                   </button>
+                                                </label>
+
+                                                <div class="rule2" style="display:inline-block;">
+                                                   <volist name="children.children" id="child">
+                                                      <label>
+                                                         <input type="checkbox" class="minimal-blue rule_three"
+                                                                name="permission_id[]" value="{{$child.id}}"
+                                                         <if condition="in_array($child.id,$role_permissions)">checked</if> >
+                                                         {{$child.name}}
+                                                      </label>
+                                                   </volist>
+                                                </div>
+
+                                             </div>
+                                          </volist>
+                                       </div>
+
+                                    </div>
+                                 </volist>
+
+                              </div>
+
+                              <div class="box-footer">
+                                 <button type="submit" class="btn btn-primary">提交</button>
+                                 <button type="reset" class="btn btn-default">重置</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+
+            </form>
+         </div>
+      </div>
+
+   </section>
+</block>
+
+<block name="js">
+   <script>
+      $(function () {
+         //一级选中，二级三级全选中
+         $('.rule_one').click(function () {
+            var checked = $(this).prop('checked');
+            $(this).parents('.rule').children('.rule1').find('input').prop('checked', checked);
+         });
+
+         //二级选中，三级也选中
+         $('.rule_two').click(function () {
+            var checked = $(this).prop('checked');
+            $(this).parents('.col-sm-offset-1').children('.rule2').find('input').prop('checked', checked);
+
+            //二级选中一个，一级也选中
+            var check_length = $('.rule_two:checked').length;
+            if (check_length) {
+               $(this).parents('.rule').find('.rule_one').prop('checked', true);
+            } else {
+               $(this).parents('.rule').find('.rule_one').prop('checked', false);
+            }
+         });
+
+         //三级选中,二级一级也选中
+         $('.rule_three').click(function () {
+            var check_length = $('.rule_three:checked').length;
+            if (check_length) {
+               $(this).parents('.rule').find('.rule_one').prop('checked', true);
+               $(this).parents('.col-sm-offset-1').find('.rule_two').prop('checked', true);
+            } else {
+               $(this).parents('.rule').find('.rule_one').prop('checked', false);
+               $(this).parents('.col-sm-offset-1').find('.rule_two').prop('checked', false);
+            }
+         })
+
+      })
+   </script>
+</block>
+
+

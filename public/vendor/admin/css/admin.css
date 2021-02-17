@@ -1,0 +1,76 @@
+.fa-check-circle {
+   color: green;
+}
+
+.fa-times-circle {
+   color: red;
+}
+
+.fa-check-circle, .fa-times-circle {
+   cursor: pointer;
+}
+
+/*多选框*/
+.minimal-blue {
+   width: 19px;
+   height: 19px;
+   vertical-align: middle;
+   border: none;
+   cursor: pointer;
+}
+
+/*分页样式*/
+.page {
+   float: right;
+}
+
+.box-footer {
+   padding: 0;
+   height: 60px;
+   line-height: 60px;
+}
+
+/*客资信息样式*/
+.area {
+   width: 280px;
+}
+
+.area li {
+   float: left;
+}
+
+.dropdown-toggle {
+   padding: 0;
+}
+
+.name {
+   width: 60px;
+   border: none;
+}
+
+.phone {
+   width: 90px;
+   border: none;
+}
+
+.dropdown-menu {
+   min-width: 0;
+}
+
+.fa-eye {
+   color: dodgerblue;
+}
+
+button {
+   padding: 0 3px;
+}
+
+/*时间样式*/
+.time {
+   width: 80px;
+}
+
+/*多选框的背景色*/
+.selected {
+   background: yellow;
+}

@@ -1,0 +1,338 @@
+<extend name="Layout/application"/>
+
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         员工列表
+         <small>Clerk index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Clerk</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+
+   <section class="content">
+
+      <include file="Layout/_flash"/>
+
+      <div class="row">
+         <div class="col-xs-12">
+            <div class="box">
+               <div class="box-header">
+                  <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i
+                       class="fa fa-refresh"></i></a>
+                  <button class="btn btn-success" data-toggle="modal" data-target="#add" title="添加"><i
+                       class="fa fa-plus"></i>
+                     添加
+                  </button>
+                  <a href="javascript:;" class="btn btn-danger btn-del delete_all" title="删除"><i
+                       class="fa fa-trash"></i> 删除</a>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                     <thead>
+                     <tr>
+                        <th>
+                           <input type="checkbox" class="check_all">
+                        </th>
+                        <th>ID</th>
+                        <th>姓名</th>
+                        <th>职位</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+
+                     <volist name="clerks" id="clerk">
+                        <tr data-id="{{$clerk.id}}">
+                           <td>
+                              <input type="checkbox" class="checked_id" name="check_id[]" value="{{$clerk.id}}">
+                           </td>
+                           <td>{{$clerk.id}}</td>
+                           <td class="name">{{$clerk.name}}</td>
+                           <td class="zhiwei">{{$zhiweis[$clerk.category_id]}}</td>
+                           <td>
+                              {{:is_something($clerk,'status')}}
+                           </td>
+                           <td>{{$clerk.create_at}}</td>
+                           <td>
+                              <button title="编辑" class="edit" data-toggle="modal" data-target="#edit">
+                                 <i class="fa fa-pencil"></i></button>
+                              <a href="javascript:;" class="delete" title="删除"
+                                 style="margin-left: 15px;color:red;"><i
+                                   class="fa fa-trash"></i></a>
+                           </td>
+                        </tr>
+                     </volist>
+
+                     </tbody>
+                  </table>
+               </div>
+               <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+      <!--新增员工模态框-->
+      <div class="modal fade" id="add">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">新增员工</h4>
+               </div>
+               <div class="modal-body">
+                  <form class="form-horizontal" method="post" action="{{:url('clerks/save')}}">
+                     <div class="box-body">
+                        <div class="form-group">
+                           <label class="col-sm-2 control-label">职位</label>
+                           <div class="col-sm-10">
+                              <select class="form-control select2" name="category_id">
+
+                                 <volist name="zhiweis" id="zhiwei">
+                                    <option value="{{$key}}">{{$zhiwei}}</option>
+                                 </volist>
+
+                              </select>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-sm-2 control-label">姓名</label>
+
+                           <div class="col-sm-10">
+                              <input type="text" name="name" class="form-control" placeholder="请输入姓名">
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /.box-body -->
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                     </div>
+                     <!-- /.box-footer -->
+                  </form>
+
+               </div>
+
+            </div>
+         </div>
+      </div>
+
+      <!--编辑员工-->
+      <div class="modal fade" id="edit">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">编辑员工</h4>
+               </div>
+               <div class="modal-body">
+                  <form class="form-horizontal" method="post" action="{{:url('clerks/update')}}">
+
+                     <input type="hidden" id="edit_id" name="id">
+                     <div class="box-body">
+                        <div class="form-group">
+                           <label class="col-sm-2 control-label">职位</label>
+                           <div class="col-sm-10">
+                              <select class="form-control select2" name="category_id">
+
+                                 <volist name="zhiweis" id="zhiwei">
+                                    <option value="{{$key}}" class="category_id">{{$zhiwei}}</option>
+                                 </volist>
+
+                              </select>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-sm-2 control-label">姓名</label>
+
+                           <div class="col-sm-10">
+                              <input type="text" name="name" id="name" class="form-control" placeholder="请输入姓名">
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /.box-body -->
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary submit">提交</button>
+                     </div>
+                     <!-- /.box-footer -->
+                  </form>
+
+               </div>
+
+            </div>
+         </div>
+      </div>
+
+
+   </section>
+</block>
+
+<block name="js">
+   <script>
+      $(function () {
+         //刷新
+         $('.btn-refresh').click(function () {
+            window.location.reload();
+         });
+
+         //编辑信息
+         $('.edit').click(function () {
+            var info = {
+               id: $(this).parents('tr').data('id'),
+               name: $(this).parents('td').siblings('.name').text(),
+               category_id: $(this).parents('td').siblings('.zhiwei').text()
+            };
+            $('#edit_id').val(info.id);
+            $('#name').val(info.name);
+            $(".category_id").each(function () {
+               if ($(this).text() == info.category_id) {
+                  $(this).attr('selected', "selected")
+               }
+            });
+         });
+
+         //删除
+         $('.delete').click(function () {
+            var id = $(this).parents('tr').data('id');
+            var _this = $(this);
+
+            layer.confirm('确认删除吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: "/admin/clerks/delete/" + id,
+                     data: {id: id},
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           _this.parents('tr').fadeOut(400);
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+         // //上面选中，下面也选中
+         // $('.check_all').click(function () {
+         //    var checked = $(this).prop('checked');
+         //    $('.checked_id').prop('checked', checked);
+         // });
+         // //下面全选，上面也选中
+         // $('.checked_id').click(function () {
+         //    var all_length = $('.checked_id').length;
+         //    var check_length = $('.checked_id:checked').length;
+         //    if (all_length == check_length) {
+         //       $('.check_all').prop('checked', true);
+         //    } else {
+         //       $('.check_all').prop('checked', false);
+         //    }
+         // });
+
+         //全选，反选
+         $('.check_all').click(function () {
+            $('.checked_id').each(function () {
+               if (this.checked) {
+                  this.checked = false;
+               } else {
+                  this.checked = true;
+               }
+            })
+         });
+
+         //多选删除
+         $('.delete_all').click(function () {
+            var check_length = $('.checked_id:checked').length;
+            if (check_length == 0) {
+               layer.msg('请你至少选中一条', {icon: 2, offset: 't'});
+               return false;
+            }
+
+            layer.confirm('确认删除多条吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: '/admin/clerks/delete_all',
+                     data: $('.checked_id:checked').serialize(),
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           $('.checked_id:checked').parents('tr').fadeOut(400);
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+         //改变属性---是否禁用账号
+         $('.change_attr').click(function () {
+            var id = $(this).parents('tr').data('id');
+            var attr = $(this).data('attr');
+            var _this = $(this);
+
+            layer.confirm('确认禁用账号吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'PATCH',
+                     url: '/admin/clerks/change',
+                     data: {id: id, attr: attr},
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           _this.toggleClass('fa fa-check-circle fa fa-times-circle');
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+      })
+   </script>
+
+</block>
+
+

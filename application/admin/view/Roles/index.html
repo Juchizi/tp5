@@ -1,0 +1,214 @@
+<extend name="Layout/application"/>
+
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         用户组管理
+         <small>Role index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Role</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+
+   <section class="content">
+
+      <include file="Layout/_flash"/>
+
+      <div class="row">
+         <div class="col-xs-12">
+            <div class="box">
+               <div class="box-header">
+                  <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i
+                       class="fa fa-refresh"></i></a>
+                  <a href="/admin/roles/create" class="btn btn-success btn-add" title="添加"><i class="fa fa-plus"></i>
+                     添加</a>
+                  <a href="javascript:;" class="btn btn-danger btn-del delete_all" title="删除"><i
+                       class="fa fa-trash"></i> 删除</a>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                     <thead>
+                     <tr>
+                        <th>
+                           <input type="checkbox" class="check_all">
+                        </th>
+                        <th>ID</th>
+                        <th>用户组名</th>
+                        <th>用户组描述</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+
+                     <volist name="roles" id="role">
+                        <tr data-id="{{$role.id}}">
+                           <td>
+                              <input type="checkbox" class="checked_id" name="check_id[]" value="{{$role.id}}">
+                           </td>
+                           <td>{{$role.id}}</td>
+                           <td>{{$role.name}}</td>
+                           <td>{{$role.description}}</td>
+                           <td>
+                              {{:is_something($role,'status')}}
+                           </td>
+                           <td>{{$role.create_at}}</td>
+                           <td>
+                              <a href="{{:url('roles/edit',['id'=>$role.id])}}" title="编辑">
+                                 <i class="fa fa-pencil"></i></a>
+                              <a href="javascript:;" class="delete" title="删除"
+                                 style="margin-left: 15px;color:red;"><i class="fa fa-trash"></i></a>
+
+                           </td>
+                        </tr>
+                     </volist>
+
+                     </tbody>
+                  </table>
+               </div>
+               <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+   </section>
+</block>
+
+<block name="js">
+   <script>
+      $(function () {
+         //刷新
+         $('.btn-refresh').click(function () {
+            window.location.reload();
+         });
+
+         //删除
+         $('.delete').click(function () {
+            var id = $(this).parents('tr').data('id');
+            var _this = $(this);
+
+            layer.confirm('确认删除吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: "/admin/roles/delete/" + id,
+                     data: {id: id},
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           _this.parents('tr').fadeOut(400);
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+         //上面选中，下面也选中
+         $('.check_all').click(function () {
+            var checked = $(this).prop('checked');
+            $('.checked_id').prop('checked', checked);
+         });
+         //下面全选，上面也选中
+         $('.checked_id').click(function () {
+            var all_length = $('.checked_id').length;
+            var check_length = $('.checked_id:checked').length;
+            if (all_length == check_length) {
+               $('.check_all').prop('checked', true);
+            } else {
+               $('.check_all').prop('checked', false);
+            }
+         });
+
+         //多选删除
+         $('.delete_all').click(function () {
+            var check_length = $('.checked_id:checked').length;
+            if (check_length == 0) {
+               layer.msg('请你至少选中一条', {icon: 2, offset: 't'});
+               return false;
+            }
+
+            layer.confirm('确认删除吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'DELETE',
+                     url: '/admin/roles/delete_all',
+                     data: $('.checked_id:checked').serialize(),
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           $('.checked_id:checked').parents('tr').fadeOut(400);
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+
+         //改变属性---是否改变状态
+         $('.change_attr').click(function () {
+            var _this = $(this);
+            var info = {
+               id: $(this).parents('tr').data('id'),
+               attr: $(this).data('attr'),
+            };
+
+            layer.confirm('确认改变状态吗?',
+               {icon: 3, title: '提示', offset: 't'},
+               function (index) {
+                  layer.close(index);
+
+                  $.ajax({
+                     type: 'PATCH',
+                     url: '/admin/roles/change',
+                     data: info,
+                     success: function (data) {
+                        //判断有没有权限
+                        if (data && data.status == 0) {
+                           layer.msg(data.msg, {
+                              icon: 5,
+                              time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                              offset: 't'
+                           });
+                           return false;
+                        } else {
+                           _this.toggleClass('fa fa-check-circle fa fa-times-circle');
+                        }
+                     }
+                  });
+               });
+            return false;
+         });
+      })
+   </script>
+
+</block>
+
+

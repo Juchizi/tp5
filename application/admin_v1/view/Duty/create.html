@@ -1,0 +1,194 @@
+<extend name="Layout/application"/>
+<block name="css">
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+         值班表单
+         <small>Duty create</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Duty</a></li>
+         <li class="active">Create</li>
+      </ol>
+   </section>
+
+   <section class="content" style="width: 70%;">
+
+      <include file="Layout/_flash"/>
+
+      <div class="box box-success">
+         <div class="box-body">
+            <ul class="nav nav-tabs">
+               <li class="active"><a href="#tab1" data-toggle="tab">基本参数</a></li>
+               <li class="pull-right"><a href="javascript:history.back(-1)" class="btn btn-sm"
+                                         style="padding:10px 2px;"><i class="fa fa-list"></i> 返回</a></li>
+            </ul>
+            <form class="form-horizontal"  role="form" method="post" action="{{:url('duty/update')}}">
+               <div class="box-body">
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周一</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte">
+                           <option value="">请选择</option>
+                           <if isset($duty_list.0.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.0.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.0.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.0.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.0.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周二</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.1.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.1.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.1.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.1.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.1.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周三</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.2.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.2.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.2.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.2.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.2.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周四</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.3.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.3.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.3.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.3.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.3.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周五</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.4.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.4.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.4.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.4.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.4.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周六</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.5.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.5.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.5.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.5.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.5.time}}">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">周日</label>
+                     <div class="col-sm-10">
+                        <select name="customer_id[]" class="form-control pull-right selecte" >
+                           <option value="">请选择</option>
+                           <if isset($duty_list.6.customers_id)>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}" <if $item.id == $duty_list.6.customers_id>selected </if>>{{$item['name']}}</option>
+                              </foreach>
+                              <else/>
+                              <foreach $customers as $item>
+                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
+                              </foreach>
+                           </if>
+                        </select>
+                        <input type="hidden" name="create_at[]" value="{{$time_list.6.date}}">
+                        <input type="hidden" name="week[]" value="{{$time_list.6.week}}">
+                        <input type="hidden" name="time[]" value="{{$time_list.6.time}}">
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <button type="reset" class="btn btn-default">重置</button>
+                     <button type="submit" class="btn btn-info pull-right">提交</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+
+   </section>
+
+</block>
+<block name="js">
+   <!--上传图片-->
+   <script src="/vendor/qiniu/jquery.html5-fileupload.js"></script>
+   <script src="/vendor/qiniu/upload.js"></script>
+   <script>
+      $(document).ready(function () {
+         $('.selecte').select2();
+
+      });
+   </script>
+</block>
+
+
+

@@ -1,0 +1,207 @@
+<extend name="Layout/application"/>
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         会议室使用统计
+         <small>Room index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Room</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+
+   <section class="content" style="overflow-x: auto;">
+
+      <include file="Layout/_flash"/>
+
+      <div class="row">
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <div class="box-header">
+                  <div class="col-md-5">
+                     <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i
+                             class="fa fa-refresh"></i></a>
+                     <a href="/admin/Room/export_customer" id="export" class="btn btn-primary btn-add" title="导出"><i
+                             class="fa fa-sign-in"></i>
+                        导出</a>
+                  </div>
+
+                  <!--搜索-->
+                  <form action="" method="get">
+
+                     <!--日期选择-->
+                     <div class="col-md-4">
+                        <div class="input-group input-group-sm" style="width: 280px;margin-top: 10px;">
+
+                           <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                 <li>申请时间</li>
+                              </button>
+                           </div>
+                           <input type="text" name="date" onchange="where()" id="datetime" value="{{$Request.param.date}}"
+                                  class="form-control date">
+                           <div class="input-group-btn">
+                              <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+
+                  <form action="" method="get">
+                     <!--输入框搜索-->
+                     <div class="col-md-3">
+                        <div class="input-group input-group-sm" style="width:280px;margin-top: 10px;">
+                           <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                 <li>状态</li>
+                              </button>
+                           </div>
+                           <select name="status" class="form-control pull-right" onchange="where()" id="status">
+                              <option value="" <if $Request.param.status == ''>selected </if>>全部</option>
+                              <option value="0" <if $Request.param.status == '0'>selected </if>>审核中</option>
+                              <option value="1" <if $Request.param.status == '1'>selected </if>>审核通过</option>
+                              <option value="2" <if $Request.param.status == '2'>selected </if>>审核驳回</option>
+                              <option value="3" <if $Request.param.status == '3'>selected </if>>已撤销</option>
+                           </select>
+                           <div class="input-group-btn">
+                              <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+
+                  </form>
+               </div>
+
+               <!-- /.box-header -->
+               <div class="box-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                     <thead>
+                     <tr>
+                        <th>申请时间</th>
+                        <th>状态</th>
+                        <th>申请人姓名</th>
+                        <th>头像</th>
+                        <th>使用时间</th>
+                        <th>参会人数</th>
+                        <th>承办单位</th>
+                        <th>会议室名称</th>
+                        <th>会议形式</th>
+                        <th>审批人</th>
+                        <th>抄送人</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <foreach name="vehicle" id="vehicles">
+                        <tr data-id="{{$vehicles.id}}">
+                           <td>
+                              {{$vehicles.create_at}}
+                           </td>
+                           <td>
+                              <if $vehicles.status == '0'>
+                              审核中
+                              <elseif  $vehicles.status == '1'/>
+                              审核通过
+                              <elseif  $vehicles.status == '2'/>
+                              审核驳回
+                              <else/>
+                              已撤销
+                              </if>
+                           </td>
+                           <td>
+                              {{$vehicles.customer.name}}
+                           </td>
+                           <td>
+                              <img src="/uploads/images/{{$vehicles.customer.portrait_url}}" width="50px">
+                           </td>
+                           <td>
+                              {{$vehicles.str_time}}至{{$vehicles.end_time}}
+                           </td>
+                           <td>
+                              {{$vehicles.people_num}}
+                           </td>
+                           <td>
+                              {{$vehicles.company_name}}
+                           </td>
+                           <td>
+                              {{$vehicles.room_name}}
+                           </td>
+                           <td>
+                              {{$vehicles.company_form}}
+                           </td>
+                           <td>
+                              {{$vehicles.approver}}
+                           </td>
+                           <td>
+                              {{$vehicles.copy_person}}
+                           </td>
+                        </tr>
+                     </foreach>
+                     </tbody>
+                  </table>
+                  <div class="box-footer">
+                     共 {{$vehicle->total()}} 条数据
+                     <div class="page">
+                        {{$vehicle->render()|raw}}
+                     </div>
+                  </div>
+               </div>
+               <!-- /.box-body -->
+            </div>
+         </div>
+         <!-- /.box -->
+      </div>
+      <!-- /.col -->
+   </section>
+
+
+</block>
+
+
+<block name="js">
+   <script>
+      function where() {
+         var date =  $('#datetime').val();
+         var status =  $('#status').val();
+
+         $('#export').attr('href','/admin/Room/export_customer?date='+date+'&status='+status)
+      }
+
+      $(function () {
+         // 搜索
+         //日期范围选择
+         lay('.date').each(function () {
+            laydate.render({
+               elem: this,
+               range: '~',
+               done: function (val) {
+                  // $(this).val(val);
+               }
+            });
+         });
+         // 搜索框
+         $('body').on("click", '.search-ul li a', function (event) {
+            var _this = $(this);
+            var _field = _this.data('field');
+            var _html = _this.html();
+            var _box = _this.closest('.input-group-btn');
+            _box.find('.search_field').val(_field);
+            _box.next('input').attr('placeholder', _html);
+            _box.find('.field').html(_html);
+         });
+
+         //刷新
+         $('.btn-refresh').click(function () {
+            window.location.reload();
+         });
+
+
+      })
+   </script>
+</block>
+
+
+

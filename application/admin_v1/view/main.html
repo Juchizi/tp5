@@ -1,0 +1,297 @@
+<extend name="Layout/application"/>
+
+<block name="content">
+   <section class="content-header">
+      <h1>
+         后台首页
+         <small>Admin index</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
+         <li class="active">Index</li>
+      </ol>
+   </section>
+   <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+               <div class="inner">
+                  <h3>{{$login_count}}</h3>
+
+                  <p>登入访问人数统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-person-stalker"></i>
+               </div>
+               <a href="/admin/Authorization/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+               <div class="inner">
+                  <h3>{{$vehicle_count}}</h3>
+                  <p>用车统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-model-s"></i>
+               </div>
+               <a href="/admin/Vehicle/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+               <div class="inner">
+                  <h3>{{$articles_count}}</h3>
+
+                  <p>办公用品领用统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-filing"></i>
+               </div>
+               <a href="/admin/work/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+               <div class="inner">
+                  <h3>{{$room_count}}</h3>
+
+                  <p>会议室使用统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-planet"></i>
+               </div>
+               <a href="/admin/Room/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+      </div>
+      <!-- /.row -->
+<!-------------------------------------------------------------------->
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+               <div class="inner">
+                  <h3>{{$duration_count}}</h3>
+
+                  <p>外出统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-briefcase"></i>
+               </div>
+               <a href="/admin/Out/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+               <div class="inner">
+                  <h3>{{$leave_count}}</h3>
+                  <p>请假统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-calendar"></i>
+               </div>
+               <a href="/admin/Leave/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+               <div class="inner">
+                  <h3>{{$patch_count}}</h3>
+
+                  <p>补卡统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion-compose"></i>
+               </div>
+               <a href="/admin/Patch/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+         <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-red">
+               <div class="inner">
+                  <h3>{{$attendance_count}}</h3>
+
+                  <p>出勤统计</p>
+               </div>
+               <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+               </div>
+               <a href="/admin/Attendance/index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+         </div>
+         <!-- ./col -->
+      </div>
+
+      <div id="main" style="width: 100%;height:480px;"></div>
+   </section>
+</block>
+
+<block name="js">
+   <script>
+      $.ajax({
+         type: 'POST',
+         url: '/admin/Index/customer_count',
+         success: function (data) {
+            //判断有没有权限
+            if (data && data.status == 0) {
+               layer.msg(data.msg, {
+                  icon: 5,
+                  time: 2000, //2秒关闭（如果不配置，默认是3秒）
+                  offset: 't'
+               });
+               return false;
+            } else {
+
+               var myChart = echarts.init(document.getElementById('main'));
+               option = {
+                  title: {
+                     text: '堆叠区域图'
+                  },
+                  tooltip : {
+                     trigger: 'axis',
+                     axisPointer: {
+                        type: 'cross',
+                        label: {
+                           backgroundColor: '#6a7985'
+                        }
+                     }
+                  },
+                  legend: {
+                     data:['登入访问人数','用车','办公室用品领用','会议室使用','外出','请假','补卡','出勤']
+                  },
+                  toolbox: {
+                     feature: {
+                        saveAsImage: {}
+                     }
+                  },
+                  grid: {
+                     left: '3%',
+                     right: '4%',
+                     bottom: '3%',
+                     containLabel: true
+                  },
+                  xAxis : [
+                     {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                     }
+                  ],
+                  yAxis : [
+                     {
+                        type : 'value'
+                     }
+                  ],
+                  series : [
+                     {
+                        name:'登入访问人数',
+                        type:'line',
+                        stack: '总量',
+                        areaStyle: {},
+                        data:[data.data[0].login, data.data[1].login, data.data[2].login, data.data[3].login, data.data[4].login, data.data[5].login, data.data[6].login,data.data[7].login,data.data[8].login,data.data[9].login,data.data[10].login,data.data[11].login,]
+                     },
+                     {
+                        name:'用车',
+                        type:'line',
+                        stack: '总量',
+                        areaStyle: {},
+                        data:[data.data[0].vehicle, data.data[1].vehicle, data.data[2].vehicle, data.data[3].vehicle, data.data[4].vehicle, data.data[5].vehicle, data.data[6].vehicle,data.data[7].vehicle,data.data[8].vehicle,data.data[9].vehicle,data.data[10].vehicle,data.data[11].vehicle,]
+                     },
+                     {
+                        name:'办公室用品领用',
+                        type:'line',
+                        stack: '总量',
+                        areaStyle: {},
+                        data:[data.data[0].articles, data.data[1].articles, data.data[2].articles, data.data[3].articles, data.data[4].articles, data.data[5].articles, data.data[6].articles,data.data[7].articles,data.data[8].articles,data.data[9].articles,data.data[10].articles,data.data[11].articles,]
+                     },
+                     {
+                        name:'会议室使用',
+                        type:'line',
+                        stack: '总量',
+                        areaStyle: {normal: {}},
+                        data:[data.data[0].room, data.data[1].room, data.data[2].room, data.data[3].room, data.data[4].room, data.data[5].room, data.data[6].room,data.data[7].room,data.data[8].room,data.data[9].room,data.data[10].room,data.data[11].room,]
+                     },
+                     {
+                        name:'外出',
+                        type:'line',
+                        stack: '总量',
+                        label: {
+                           normal: {
+                              show: true,
+                              position: 'top'
+                           }
+                        },
+                        areaStyle: {normal: {}},
+                        data:[data.data[0].duration, data.data[1].duration, data.data[2].duration, data.data[3].duration, data.data[4].duration, data.data[5].duration, data.data[6].duration,data.data[7].duration,data.data[8].duration,data.data[9].duration,data.data[10].duration,data.data[11].duration,]
+                     },
+                     {
+                        name:'请假',
+                        type:'line',
+                        stack: '总量',
+                        label: {
+                           normal: {
+                              show: true,
+                              position: 'top'
+                           }
+                        },
+                        areaStyle: {normal: {}},
+                        data:[data.data[0].leaves, data.data[1].leaves, data.data[2].leaves, data.data[3].leaves, data.data[4].leaves, data.data[5].leaves, data.data[6].leaves,data.data[7].leaves,data.data[8].leaves,data.data[9].leaves,data.data[10].leaves,data.data[11].leaves,]
+                     },
+                     {
+                        name:'补卡',
+                        type:'line',
+                        stack: '总量',
+                        label: {
+                           normal: {
+                              show: true,
+                              position: 'top'
+                           }
+                        },
+                        areaStyle: {normal: {}},
+                        data:[data.data[0].patch, data.data[1].patch, data.data[2].patch, data.data[3].patch, data.data[4].patch, data.data[5].patch, data.data[6].patch,data.data[7].patch,data.data[8].patch,data.data[9].patch,data.data[10].patch,data.data[11].patch,]
+                     },
+                     {
+                        name:'出勤',
+                        type:'line',
+                        stack: '总量',
+                        label: {
+                           normal: {
+                              show: true,
+                              position: 'top'
+                           }
+                        },
+                        areaStyle: {normal: {}},
+                        data:[data.data[0].attendance, data.data[1].attendance, data.data[2].attendance, data.data[3].attendance, data.data[4].attendance, data.data[5].attendance, data.data[6].attendance,data.data[7].attendance,data.data[8].attendance,data.data[9].attendance,data.data[10].attendance,data.data[11].attendance,]
+
+                     },
+                  ]
+               };
+               myChart.setOption(option);
+
+
+
+            }
+         }
+      });
+
+   </script>
+</block>
+
+

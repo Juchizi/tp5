@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <title>后台管理</title>
+   <!-- Tell the browser to be responsive to screen width -->
+   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <!-- Bootstrap 3.3.7 -->
+   <link rel="stylesheet" href="/vendor/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+   <!-- Font Awesome -->
+   <link rel="stylesheet" href="/vendor/assets/bower_components/font-awesome/css/font-awesome.min.css">
+   <!-- Ionicons -->
+   <link rel="stylesheet" href="/vendor/assets/bower_components/Ionicons/css/ionicons.min.css">
+   <!-- Theme style -->
+   <link rel="stylesheet" href="/vendor/assets/dist/css/AdminLTE.min.css">
+   <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+   <link rel="stylesheet" href="/vendor/assets/dist/css/skins/_all-skins.min.css">
+   <!-- bootstrap wysihtml5 - text editor -->
+   <link rel="stylesheet" href="/vendor/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+   <link rel="stylesheet" href="/vendor/layui/css/layui.css"  media="all">
+</head>
+<body class="hold-transition fixed skin-blue sidebar-mini">
+<div class="wrapper">
+
+   <include file="Layout/_header"/>
+   <!-- Left side column. contains the logo and sidebar -->
+
+   <include file="Layout/_sidebar"/>
+
+   <!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
+      <!--Content Header (Page header) -->
+      <!--<include file="Layout/_flash" />-->
+
+      <!-- Main content -->
+      <iframe name="back" src="/admin/index/main" id="back" style="overflow: visible;height:830px;" frameborder="0"
+              width="100%" scrolling="auto">
+
+         <!--      <iframe name="back" src="/admin/index/main" id="back" onload="this.height=back.document.body.scrollHeight"-->
+         <!--              frameborder="0" width="100%" scrolling="auto">-->
+
+      </iframe>
+
+
+   </div>
+   <!-- /.content-wrapper -->
+   <footer class="main-footer">
+      <div class="pull-right hidden-xs">
+         <b>Version</b> 2.1.0
+      </div>
+      <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+      reserved.
+   </footer>
+
+
+   <!-- Control Sidebar侧边栏设置 -->
+   <include file="Layout/_aside"/>
+   <!-- /.control-sidebar -->
+
+   <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="/vendor/assets/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/vendor/assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+   $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/vendor/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/vendor/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/vendor/assets/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/vendor/assets/dist/js/demo.js"></script>
+<script src="/vendor/admin/js/menu.js"></script>
+<script src="/vendor/layer/layer.js"></script>
+<script src="/vendor/layui/layui.js"></script>
+
+<if condition="session('alert')">
+   <script>
+      layer.msg("{{:session('alert')}}", {
+         icon: 1,
+         time: 2500,
+         offset: 't'
+      });
+   </script>
+</if>
+</body>
+</html>
+
+
+
+

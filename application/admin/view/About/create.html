@@ -1,0 +1,72 @@
+<extend name="Layout/application"/>
+<block name="css">
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+            关于我们
+         <small>About create</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> company</a></li>
+         <li class="active">Create</li>
+      </ol>
+   </section>
+   <link rel="stylesheet" href="/vendor/layui/css/layui.css"  media="all">
+   <section class="content" style="width: 70%;">
+      <include file="Layout/_flash"/>
+      <div class="box box-success">
+         <div class="box-body">
+            <ul class="nav nav-tabs">
+               <li class="active"><a href="#tab1" data-toggle="tab">基本参数</a></li>
+               <li class="pull-right"><a href="javascript:history.back(-1)" class="btn btn-sm"
+                                         style="padding:10px 2px;"><i class="fa fa-list"></i> 返回</a></li>
+            </ul>
+            <form id="form" class="form-horizontal layui-form" role="form" method="post" action="{{:url('About/update')}}" >
+               <div class="box-body">
+                <textarea id="container" name="content" cols="30" rows="15" style="width:100%; margin: 0 auto;">{{$about}}
+    </textarea>
+                   <input name="info" type="hidden" id="info">
+                  <div class="box-footer">
+                     <button type="button" onclick="uptext()" class="btn btn-info pull-right">提交</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </section>
+
+</block>
+
+<block name="js">
+   <!-- 配置文件 -->
+   <script type="text/javascript" src="/vendor/ueditor/utf8-php/ueditor.config.js"></script>
+   <!-- 编辑器源码文件 -->
+   <script type="text/javascript" src="/vendor/ueditor/utf8-php/ueditor.all.js"></script>
+   <!-- 实例化编辑器 -->
+   <script type="text/javascript">
+      //var ue = UE.getEditor('container');
+     var ue = UE.getEditor('container', {
+         autoHeightEnabled:false,
+         initialFrameHeight:420
+      });
+
+
+      //这段要放在文本编辑器的实例化之后
+      function uptext(){
+          if (!UE.getEditor('container').hasContents()){
+              alert('请先填写内容!');
+          }else{
+              var p = UE.getEditor('container').getContent();
+              console.log(UE.getEditor('container').getContent());
+              $('#info').val(p);
+              $('#form').submit();
+          }
+      }
+   </script>
+</block>
+
+
+
+
+

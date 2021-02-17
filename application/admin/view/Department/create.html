@@ -1,0 +1,67 @@
+<extend name="Layout/application"/>
+<block name="css">
+</block>
+<block name="content">
+   <section class="content-header">
+      <h1>
+         <if condition="empty($info)">
+            部门添加
+            <else/>
+            部门修改
+         </if>
+         <small>Department create</small>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="#"><i class="fa fa-dashboard"></i> Department</a></li>
+         <li class="active">Create</li>
+      </ol>
+   </section>
+
+   <section class="content" style="width: 70%;">
+
+      <include file="Layout/_flash"/>
+
+      <div class="box box-success">
+         <div class="box-body">
+            <form class="form-horizontal" enctype="multipart/form-data" role="form" method="post" <if empty($info)> action="{{:url('Department/save')}}" <else/>  action="{{:url('Department/edit')}}" </if>>
+               <input type="hidden" name="id" value="{{$info->id??''}}">
+               <div class="box-body">
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label">部门名称</label>
+                     <div class="col-sm-10">
+                        <input type="text" name="name" class="form-control" placeholder="请输入名称" value="{{$info->name??''}}">
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <button type="reset" class="btn btn-default">重置</button>
+                     <button type="submit" class="btn btn-info pull-right">提交</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+
+   </section>
+   <script>
+      function imags(file) {
+            if (file.files && file.files[0]){
+               var reader = new FileReader();
+               reader.onload = function(evt){
+                  $("#div_imag").html('<img class="pimg" src="' + evt.target.result + '" width="200px" />');
+               };
+               reader.readAsDataURL(file.files[0]);
+            }else{
+               $("#div_imag").html('<div style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'"></div>');
+            }
+
+      }
+   </script>
+</block>
+<block name="js">
+   <!--上传图片-->
+   <script src="/vendor/qiniu/jquery.html5-fileupload.js"></script>
+   <script src="/vendor/qiniu/upload.js"></script>
+</block>
+
+
+
